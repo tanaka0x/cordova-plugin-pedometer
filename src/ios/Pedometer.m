@@ -83,9 +83,20 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
 
-    NSDate* startDate = [dateFormatter dateFromString:[args objectForKey:@"startDate"]];
-    NSDate* endDate = [dateFormatter dateFromString:[args objectForKey:@"endDate"]];
-
+    NSDate* startDate;
+    NSDate* endDate;
+    if ([[args objectForKey:@"startDate"] isKindOfClass:[NSDate class]]) {
+        startDate = [args objectForKey:@"startDate"];
+    } else {
+        startDate = [dateFormatter dateFromString:[args objectForKey:@"startDate"]];
+    }
+    
+    if ([[args objectForKey:@"endDate"] isKindOfClass:[NSDate class]]) {
+        endDate = [args objectForKey:@"endDate"];
+    } else {
+        endDate = [dateFormatter dateFromString:[args objectForKey:@"endDate"]];
+    }
+    
     __block CDVPluginResult* pluginResult = nil;
 
     [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
